@@ -95,38 +95,55 @@ ggpairs(as.data.frame(Pokemon_x_scaled))
 Apply latent variable method described in this work book. Do you find anything that you did not find before?
 
 ```{r}
-#
-#
+pca_result <- prcomp(Pokemon_x_scaled)
+summary(pca_result)
+print(pca_result$rotation)
+plot(pca_result, type = 'line')
+biplot(pca_result, main = "PCA Biplot")
 ```
 
 Comment of the result:
 
 ~~~
-Please write your answer in full sentences.
-
-
+The 6 of PCs include all variance in data.
+PC1 captures 45.41% of variance in data set with sd of 0.6272. Within PC1, Sp.Atk has highest coef 0.5124 meaning this variables contributes most in the first component. 
+The plot visualize comparison between PC1, PC2, and Pokemons' distribution. It seems like defense is negatively correlated to speed.
 ~~~
 
 
 I also found evolution information 
 
 ```{r}
-Pokemon_evo<-fread("Pokemon_evo.csv")
+Pokemon_evo<-fread("Pokemon_evo.csv") #fread?
 ```
 
 
 ```{r}
-#
-#
+Pokemon$Evo_Stage <- 0
+stg <- colnames(Pokemon_evo)
+for(i in 1:ncol(Pokemon_evo)) {
+  Pokemon$Evo_Stage[Pokemon$Name %in% Pokemon_evo[[i]]] <- i
+}
+pkm_full <- cbind(Stage = as.numeric(Pokemon$Evo_Stage), Pokemon_x)
+pca_result_evo <- prcomp(pkm_full, scale. = TRUE)
+summary(pca_result_evo)
+print(pca_result_evo$rotation)
+plot(pca_result_evo, type = 'line')
+biplot(pca_result_evo, main = "PCA Biplot", cex = 0.6)
 ```
 
 Comment of the result:
 
 ~~~
-Please write your answer in full sentences.
-
-
+PC2 explain most of Stage with a coefficient of 0.5640.  
 ~~~
+
+
+
+
+
+
+
 
 ## Additional Material
 
